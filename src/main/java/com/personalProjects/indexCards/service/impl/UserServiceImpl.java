@@ -68,16 +68,24 @@ public class UserServiceImpl implements UserService {
     public User initializeOrUpdateUser(Jwt jwt) {
         String userId = jwt.getSubject(); // This is the 'sub' claim
         String email = jwt.getClaimAsString("email");
-        String givenName = jwt.getClaimAsString("given_name");
+        if (email == null) {
+            email = jwt.getClaimAsString("custom:email"); // Fallback for custom claims
+        }
+        String givenName = jwt.getClaimAsString("cognito:username");
 
-        // Find existing user or create new one
-        User user = userRepository.findById(userId)
-                .orElseGet(User::new);
+
+        // Find existing user or create a new one
+        User user = userRepository.findById(userId).orElseGet(() -> {
+            User newUser = new User();
+            newUser.setId(userId);
+            return newUser;
+        });
 
         // Update user information
-        user.setId(userId);
         user.setEmail(email);
         user.setGivenName(givenName);
+
+        log.info("User initialized/updated: ID={}, Email={}, GivenName={}", userId, email, givenName);
 
         return userRepository.save(user);
     }
@@ -96,7 +104,6 @@ public class UserServiceImpl implements UserService {
             try {
                 cognitoClient.adminDeleteUser(deleteUserRequest);
             } catch (UserNotFoundException e) {
-                // If user doesn't exist in Cognito, proceed with local deletion
                 log.warn("User not found in Cognito, proceeding with local deletion");
             }
 
@@ -107,7 +114,6 @@ public class UserServiceImpl implements UserService {
             if (!(e instanceof UserNotFoundException)) {
                 throw new RuntimeException("Failed to delete user: " + e.getMessage(), e);
             }
-            // If it's UserNotFoundException, proceed with local deletion
             userRepository.deleteById(currentUser.getId());
         }
     }
