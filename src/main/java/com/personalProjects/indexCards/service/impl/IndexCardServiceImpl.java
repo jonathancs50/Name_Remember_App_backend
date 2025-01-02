@@ -16,11 +16,14 @@ import com.personalProjects.indexCards.repository.UserRepository;
 import com.personalProjects.indexCards.service.interfaces.IndexCardService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class IndexCardServiceImpl implements IndexCardService {
@@ -32,8 +35,8 @@ public class IndexCardServiceImpl implements IndexCardService {
     private final UserRepository userRepository;
 
 
+
     @Override
-    @Transactional
     public IndexCardResponseDTO createIndexCard(IndexCardRequestDTO requestDTO) {
         User currentUser = User.getCurrentUser(userRepository);
         Person person=personRepository.findByIdAndUserId(requestDTO.getPersonId(), currentUser.getId())
@@ -153,4 +156,23 @@ public class IndexCardServiceImpl implements IndexCardService {
         List<IndexCard> cardsToDelete = indexCardRepository.findByEventIdAndUserId(eventId, currentUser.getId());
         indexCardRepository.deleteAll(cardsToDelete);
     }
+
+    @Transactional
+    @Override
+    public void deleteIndexCardsAndPersonsByEventId(Long eventId) {
+        // First, get all index cards for this event
+        List<IndexCard> indexCards = indexCardRepository.findByEventId(eventId);
+
+        // Collect all person IDs from these index cards
+        Set<Long> personIds = indexCards.stream()
+                .map(card -> card.getPerson().getId())
+                .collect(Collectors.toSet());
+
+        // Delete the index cards first (due to foreign key constraints)
+        indexCardRepository.deleteAllByEventId(eventId);  // Changed to deleteAllByEventId
+
+        // Then delete all the associated persons
+        personRepository.deleteAllById(personIds);
+    }
+
 }

@@ -10,10 +10,13 @@ public interface IndexCardRepository extends JpaRepository<IndexCard, Long> {
 
     List<IndexCard> findByPersonId(Long personId);
     List<IndexCard> findByEventId(Long eventId);
+    void deleteAllByEventId(Long eventId);
     List<IndexCard> findAllByUserId(String userId);
     Optional<IndexCard> findByIdAndUserId(Long id, String userId);
     boolean existsByIdAndUserId(Long id, String userId);
     List<IndexCard> findByPersonIdAndUserId(Long personId, String userId);
     List<IndexCard> findByEventIdAndUserId(Long eventId, String userId);
     List<IndexCard> findByEventIdAndPersonIdAndUserId(Long eventId, Long personId, String userId);
+
+
 }

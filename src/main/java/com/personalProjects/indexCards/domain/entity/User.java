@@ -112,19 +112,7 @@ public class User {
                 '}';
     }
 
-//    public static User initializeFromAuthentication(Authentication authentication) {
-//        String username = authentication.getName();
-//        User user = new User();
-//        user.setId(username);
-//
-//        if (authentication.getPrincipal() instanceof Jwt) {
-//            Jwt jwt = (Jwt) authentication.getPrincipal();
-//            user.setEmail(jwt.getClaimAsString("email"));
-//            user.setGivenName(jwt.getClaimAsString("given_name"));
-//        }
-//
-//        return user;
-//    }
+
 
     public static User getCurrentUser(UserRepository userRepository) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

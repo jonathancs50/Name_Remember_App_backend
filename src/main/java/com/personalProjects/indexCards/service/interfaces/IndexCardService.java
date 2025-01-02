@@ -16,4 +16,5 @@ public interface IndexCardService {
     void deleteIndexCard(Long id);
     void deleteIndexCardsByEventIdAndPersonId(Long eventId, Long personId);
     void deleteIndexCardsByEventId(Long eventId);
+    void deleteIndexCardsAndPersonsByEventId(Long eventId);
 }
