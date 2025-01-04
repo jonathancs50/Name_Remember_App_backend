@@ -8,7 +8,7 @@ ReMind was created from a personal challenge that many face: remembering names a
 ## System Architecture
 
 ### High-Level Architecture
-![High Level Architecture](public/high_lvl_view.png)
+![High Level Architecture](high_lvl_view.png)
 
 The system is built using a modern tech stack:
 - Frontend: Next.js
@@ -18,12 +18,12 @@ The system is built using a modern tech stack:
 - Containerization: Docker
 
 ### Database Schema
-![Database Schema](public/springbootDB.png)
+![Database Schema](springbootDB.png)
 
 The database design ensures proper data isolation and relationship management between users, events, persons, and index cards.
 
 ### Authentication Flow
-![Authentication Flow](public/auth_process_app_reminder.png)
+![Authentication Flow](auth_process_app_reminder.png)
 
 The application uses AWS Cognito for secure authentication, implementing the OAuth2 authorization code grant flow.
 
