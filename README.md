@@ -5,7 +5,7 @@ ReMind is a fun web application I designed to help myself remember people that I
 
 ReMind was created from a personal challenge that many face: remembering names and details about people we meet. The idea comes from a fascinating historical account of a U.S. president who maintained a system of index cards to track relationships and build meaningful connections. This practice proved invaluable in his journey to the presidency, demonstrating the power of personal relationship management.
 
-##Video Walk through
+## Video Walk through
 Youtube: https://youtu.be/E7MglodX8hE
 
 ## System Architecture
